@@ -8,12 +8,15 @@ refer to https://github.com/dmlc/tvm/tree/master/apps/android_rpc
 
 ## Build with OpenCL
 This application does not link any OpenCL library unless you configure it to. In app/src/main/jni/make you will find JNI Makefile config config.mk. Copy it to app/src/main/jni and modify it.
-'''
+
+```
 cd apps/android_rpc/app/src/main/jni
 cp make/config.mk .
-'''
+```
 
-'''
+below is my example:
+
+```
 #-------------------------------------------------------------------------------
 #  Template configuration for compiling
 #
@@ -40,10 +43,11 @@ ADD_C_INCLUDES = /Users/sgxu/Desktop/Android/OpenCL-Headers/opencl12
 
 # the additional link libs you want to add, e.g., ANDROID_LIB_PATH/libOpenCL.so
 ADD_LDLIBS = /Users/sgxu/Desktop/Android/libOpenCL.so
+```
 
-'''
 + In which, ADD_C_INCLUDES is the standard OpenCL headers, you can download from: https://github.com/KhronosGroup/OpenCL-Headers
 + In which, ADD_LDLIBS is the mobile phone's opencl lib, You can use adb pull to get the file to your MacBook:
+
 ```
 adb pull /system/vendor/lib64/libOpenCL.so ./
 ```
