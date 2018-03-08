@@ -5,7 +5,10 @@
 
 #include "demo.h"
 
-int Apply(const std::string &lib_path, const std::string &graph_path, const std::string &param_path) {
+int Apply(const std::string &lib_path,
+        const std::string &graph_path,
+        const std::string &param_path,
+        const std::string &image_path) {
     // tvm module for compiled functions
     tvm::runtime::Module mod_syslib = tvm::runtime::Module::LoadFromFile(lib_path);
 
@@ -33,14 +36,20 @@ int Apply(const std::string &lib_path, const std::string &graph_path, const std:
     // get global function module for graph runtime
     tvm::runtime::Module mod = (*tvm::runtime::Registry::Get("tvm.graph_runtime.create"))(json_data, mod_syslib, device_type, device_id);
 
+    const int N = 1;
+    const int C = 3;
+    const int H = 224;
+    const int W = 224;
     DLTensor* x;
     int in_ndim = 4;
-    int64_t in_shape[4] = {1, 3, 224, 224};
+    //int64_t in_shape[4] = {1, 3, 224, 224};
+    int64_t in_shape[4] = {N, C, H, W};
+
     TVMArrayAlloc(in_shape, in_ndim, dtype_code, dtype_bits, dtype_lanes, device_type, device_id, &x);
 
     // load image data saved in binary
-    std::ifstream data_fin("cat.bin", std::ios::binary);
-    data_fin.read(static_cast<char*>(x->data), 3 * 224 * 224 * sizeof(float));
+    std::ifstream data_fin(image_path, std::ios::binary);
+    data_fin.read(static_cast<char*>(x->data), C * H * W * sizeof(float));
 
     // get the function from the module(set input data)
     tvm::runtime::PackedFunc set_input = mod.GetFunction("set_input");
