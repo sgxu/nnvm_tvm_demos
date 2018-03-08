@@ -56,3 +56,9 @@ Now use NDK to generate standalone toolchain for your device. For my test device
 cd /opt/android-ndk/build/tools/
 ./make-standalone-toolchain.sh --platform=android-24 --use-llvm --arch=arm64 --install-dir=/Users/sgxu/Desktop/Android/android-toolchain-arm64
 ```
+# How Run this demo
+## python
+```
+cd python
+./run.sh
+```
