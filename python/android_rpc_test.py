@@ -99,7 +99,7 @@ path_graph = os.path.abspath(product_dir)
 path_graph += "/" + graph_name
 with open(path_graph, "w") as f:
         f.write(graph.json())
-# save weights
+# save parameters
 param_name = "deploy.params"
 path_param = os.path.abspath(product_dir)
 path_param += "/" + param_name
