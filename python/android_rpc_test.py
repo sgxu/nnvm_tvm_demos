@@ -99,17 +99,30 @@ path_graph = os.path.abspath(product_dir)
 path_graph += "/" + graph_name
 with open(path_graph, "w") as f:
         f.write(graph.json())
-'''
 # save weights
 param_name = "deploy.params"
 path_param = os.path.abspath(product_dir)
 path_param += "/" + param_name
-with open(path_param, "w") as f:
-    f.write(params)
-'''
+with open(path_param, 'wb') as f:
+    f.write(nnvm.compiler.save_param_dict(params))
 '''
 print('show opencl kernel:')
 print(lib.imported_modules[0].get_source())
+'''
+'''
+######################################################################
+# We can load the module back.
+loaded_lib = tvm.module.load(path_so)
+loaded_json = open(path_graph).read()
+loaded_params = bytearray(open(path_param), "rb").read())
+rmodule = graph_runtime.create(loaded_json, loaded_lib, tvm.gpu(0))
+params = nnvm.compiler.load_param_dict(loaded_params)
+# directly load from byte array
+module.load_params(loaded_params)
+module.run(x=x_np)
+# get the first output
+out = module.get_output(0, out=tvm.nd.empty(shape))
+print(out.asnumpy())
 '''
 
 ######################################################################
